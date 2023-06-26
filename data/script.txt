@@ -1,0 +1,35 @@
+# Tom Whittington
+# Dojo 20230606
+
+import numpy as np, pandas as pd
+import seaborn as sns
+import os
+import glob
+sns.set_theme(style="ticks", palette="pastel")
+sns.despine(offset=10, trim=True)
+
+# Build the DF
+path = r"C:\Users\TomWhittington\Downloads\Dojo & LAET Data Project Resources 20230606 SHARING"
+all_files = glob.glob(os.path.join(path , "transactions-customer*.csv"))
+li = []
+
+for filename in all_files:
+    df = pd.read_csv(filename, index_col=None, header=0, parse_dates=['transaction_timestamp'])
+    li.append(df)
+
+df = pd.concat(li, axis=0, ignore_index=True)
+
+# Boxplot of amounts
+sns.boxplot(
+    data=df, 
+    x="customer_id", y="amount"
+)
+
+# Line of amounts by day
+cust_amounts_by_day = df.groupby([
+                'customer_id', pd.Grouper(key='transaction_timestamp', axis=0, freq='D')
+            ]).sum('amount')
+
+sns.lineplot(x="transaction_timestamp", y="amount",
+             hue="customer_id",
+             data=cust_amounts_by_day)
