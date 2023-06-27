@@ -12,8 +12,10 @@ def graph_card(title, content, fig):
             html.Div(
                 className="card-body flex flex-col items-center justify-center",
                 children=[
-                    html.H2(className="card-title", children=title),
-                    html.P(className="max-w-prose", children=content),
+                    html.H2(className="card-title text-xl", children=title),
+                    html.Ul(
+                        className="max-w-prose list-disc text-lg", children=content
+                    ),
                 ],
             ),
         ],
