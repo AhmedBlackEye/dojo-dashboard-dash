@@ -11,6 +11,7 @@ def navbar(pages):
                     html.A(
                         className="btn btn-ghost normal-case md:text-4xl font-sans font-bold",
                         children="Dojo",
+                        href="https://dojo.tech/",
                     )
                 ],
             ),

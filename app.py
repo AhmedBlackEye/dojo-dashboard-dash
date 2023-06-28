@@ -11,7 +11,7 @@ app = Dash(
 
 
 app.layout = html.Div(
-    className="grid place-items-center bg-gray-200 px-2 md:px-4 lg:px-10",
+    className="grid place-items-center bg-gray-200 px-2 md:px-4 lg:px-10 font-sans",
     children=[
         navbar(dash.page_registry.values()),
         dash.page_container,

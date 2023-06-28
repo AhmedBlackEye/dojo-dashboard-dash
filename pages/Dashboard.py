@@ -60,24 +60,21 @@ def get_metrics_layout(current_data, prev_data):
 
 def get_dashboard_layout(data):
     return html.Div(
-        className="grid grid-cols-8",
+        className="grid grid-cols-8 bg-base-100 mt-10 rounded-xl",
         children=[
             dcc.Graph(
                 className="col-span-5",
-                figure=add_predicted_sales(get_sales_over_time(data)),
+                figure=get_sales_over_time(data),
             ),
             dcc.Graph(
                 className="col-span-3",
-                figure=get_sales_per_location(data),
+                figure=get_sales_per_card_type(data),
             ),
             dcc.Graph(
                 className="col-span-4",
                 figure=get_sales_per_weekday(data),
             ),
-            dcc.Graph(
-                className="col-span-4",
-                figure=visualize_forecast(),
-            ),
+            dcc.Graph(className="col-span-4", figure=get_sales_per_location(data)),
         ],
     )
 

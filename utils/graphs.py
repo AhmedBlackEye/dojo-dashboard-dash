@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 from dash import html
 from .get_data import data, current_end_date
+import numpy as np
 
 # from lifetimes import (
 #     GammaGammaFitter,
@@ -23,6 +24,13 @@ weekday_order = [
 ]
 
 
+def transparent(fig):
+    newfig = fig.update_layout(
+        plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)", font_color="white"
+    )
+    return newfig
+
+
 def get_sales_over_time(data):
     sales_over_time = (
         data.groupby("transaction_timestamp")["amount"].sum().cumsum().reset_index()
@@ -35,7 +43,7 @@ def get_sales_over_time(data):
         labels={"transaction_timestamp": "Time", "amount": "Sales"},
     )
 
-    return fig
+    return transparent(fig)
 
 
 def get_sales_over_time_info(data):
@@ -89,13 +97,15 @@ def get_sales_per_weekday(data):
     )
 
     sales_per_weekday = sales_per_weekday.sort_values("transaction_timestamp")
-    return px.bar(
+    fig = px.bar(
         sales_per_weekday,
         x="transaction_timestamp",
         y="amount",
         title="Sales Per Day",
         labels={"transaction_timestamp": "Day", "Sales": "Amount"},
     )
+
+    return transparent(fig)
 
 
 def get_sales_per_weekday_info(data):
@@ -140,23 +150,24 @@ def get_sales_per_weekday_info(data):
 ################## Sales Per Location Graph ##################
 def get_sales_per_location(data, chart_type="pie"):
     locations_sales = data.groupby("postcode_area")["amount"].sum().reset_index()
-    if chart_type == "pie":
-        return px.pie(
+    if chart_type == "pie1":
+        fig = px.pie(
             locations_sales,
             values="amount",
             names="postcode_area",
             title="Sales by Location",
-            hole=0.4,
+            hole=0.2,
             labels={"amount": "Sales Amount", "postcode_area": "Location"},
         )
     else:
-        return px.bar(
+        fig = px.bar(
             locations_sales,
             x="postcode_area",
             y="amount",
             title="Sales by Location",
             labels={"amount": "Sales Amount", "postcode_area": "Location"},
         )
+    return transparent(fig)
 
 
 ######################### Sales Per Location #####################
@@ -232,13 +243,14 @@ def get_sales_per_hour_info(data):
 ##### Sales per Card Type #####
 def get_sales_per_card_type(data):
     card_type_sales = data.groupby("card_type")["amount"].sum().reset_index()
-    return px.pie(
+    fig = px.pie(
         card_type_sales,
         values="amount",
         names="card_type",
         title="Sales by Card Type",
         labels={"amount": "Sales Amount", "card_type": "Card Type"},
     )
+    return transparent(fig)
 
 
 def get_sales_per_card_entry(data):
@@ -250,60 +262,3 @@ def get_sales_per_card_entry(data):
         title="Sales by Card Entry",
         labels={"amount": "Sales Amount", "entry_type": "Card Entry"},
     )
-
-
-# def get_customer_lifetime_value_graph(data):
-#     # Calculate recency and T values
-#     max_purchase_date = (
-#         data.groupby("customer_id")["transaction_timestamp"].max().reset_index()
-#     )
-#     max_purchase_date.columns = ["customer_id", "last_purchase_date"]
-#     data = pd.merge(data, max_purchase_date, on="customer_id")
-#     data["recency"] = (
-#         data["last_purchase_date"].max() - data["last_purchase_date"]
-#     ).dt.days
-#     data["T"] = (
-#         data["last_purchase_date"].max() - data["transaction_timestamp"]
-#     ).dt.days
-
-#     # Calculate frequency
-#     summary = data.groupby("customer_id").agg(
-#         {"transaction_timestamp": ["count", "min"], "amount": "sum"}
-#     )
-#     summary.columns = ["frequency", "first_purchase_date", "monetary_value"]
-#     summary["first_purchase_date"] = (
-#         summary["first_purchase_date"].max() - summary["first_purchase_date"]
-#     ).dt.days
-#     summary.reset_index(inplace=True)
-
-#     # Filter out non-positive values in monetary_value
-#     summary = summary[summary["monetary_value"] > 0]
-
-#     # Fit the Gamma-Gamma model
-#     ggf = GammaGammaFitter(penalizer_coef=0.4)
-#     ggf.fit(summary["frequency"], summary["monetary_value"])
-
-#     # Fit the BG/NBD model
-#     bgf = BetaGeoFitter(penalizer_coef=0.4)
-#     bgf.fit(summary["frequency"], summary["recency"], summary["T"])
-
-#     # Calculate customer lifetime value
-#     summary["clv"] = ggf.customer_lifetime_value(
-#         bgf,
-#         summary["frequency"],
-#         summary["recency"],
-#         summary["T"],
-#         summary["monetary_value"],
-#     )
-
-#     # Plot the number of transactions per customer
-#     fig = px.bar(
-#         summary,
-#         x="customer_id",
-#         y="frequency",
-#         title="Number of Transactions per Customer",
-#     )
-#     return fig
-
-
-# # Example usage:
