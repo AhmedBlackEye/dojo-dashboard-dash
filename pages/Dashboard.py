@@ -29,6 +29,7 @@ def get_metrics_layout(current_data, prev_data):
         transaction_num,
         transaction_pct_change,
         img_name="transactions",
+        add_sterling_symbol=False,
     )
 
     avg_sale_value = current_data["amount"].mean()
@@ -46,6 +47,7 @@ def get_metrics_layout(current_data, prev_data):
         prev_most_transaction_postcode_area,
         img_name="location",
         is_num_metric=False,
+        add_sterling_symbol=False,
     )
     return html.Div(
         className="stats lg:max-w-screen-lg w-full max-[600px]:grid-cols-1 max-[600px]:grid-rows-4 max-[700px]:grid-cols-2 max-[700px]:grid-rows-2 max-[800px]:grid-cols-4 max-[800px]:grid-rows-1",

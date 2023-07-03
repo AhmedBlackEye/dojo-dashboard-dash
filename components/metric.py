@@ -2,9 +2,11 @@ from dash import html, dcc
 from millify import millify
 
 
-def metric(title, value, desc, img_name=None, is_num_metric=True):
+def metric(
+    title, value, desc, img_name=None, is_num_metric=True, add_sterling_symbol=True
+):
     if is_num_metric:
-        value = "£ " + millify(value, 2)
+        value = "£ " + millify(value, 2) if add_sterling_symbol else millify(value, 2)
         desc = round(desc, 1)
         if desc == 0:
             stat_desc_element = None

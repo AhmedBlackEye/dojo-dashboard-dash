@@ -3,7 +3,7 @@ from dash import html, dcc
 
 def navbar(pages):
     return html.Div(
-        className="navbar bg-base-100 max-w-screen-xl my-8 rounded-lg",
+        className="navbar bg-base-100 max-w-screen-xl my-8 rounded-lg text-white",
         children=[
             html.Div(
                 className="flex-1",
@@ -23,7 +23,12 @@ def navbar(pages):
                         children=[
                             *[
                                 html.Li(
-                                    dcc.Link(page["name"], href=page["relative_path"])
+                                    [
+                                        dcc.Link(
+                                            page["name"], href=page["relative_path"]
+                                        )
+                                    ],
+                                    className="text-md",
                                 )
                                 for page in pages
                             ],

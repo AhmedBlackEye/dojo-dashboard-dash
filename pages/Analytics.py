@@ -25,10 +25,10 @@ def sidebar():
         children=[
             html.Div(
                 [
-                    html.Span("Date:", className="text-xl font-semibold"),
+                    html.Span("Date:", className="text-xl text-white"),
                     dcc.DatePickerRange(
                         id="date-range",
-                        className="inline-block",
+                        className="",
                         start_date=pd.Timestamp(year=2023, month=5, day=1),
                         end_date=pd.Timestamp(year=2023, month=5, day=31),
                         display_format="MMM Do, YY",
@@ -42,58 +42,61 @@ def sidebar():
             ),
             html.Div(
                 [
-                    html.Span("Locations", className="text-xl font-semibold"),
+                    html.Span("Card Type:", className="text-xl text-white"),
+                    dcc.Checklist(
+                        id="card_types",
+                        options=card_types,
+                        value=card_types,
+                        className="flex gap-3 text-white text-xl",
+                        labelClassName="label",
+                        inputClassName="checkbox mr-2 -mb-1",
+                    ),
+                ],
+                className="flex flex-col gap-2",
+            ),
+            html.Div(
+                [
+                    html.Span(
+                        "Card Country Type:",
+                        className="text-xl text-white",
+                    ),
+                    dcc.Checklist(
+                        id="card_country_types",
+                        options=card_country_types,
+                        value=card_country_types,
+                        className="flex gap-3 text-white text-xl",
+                        labelClassName="label",
+                        inputClassName="checkbox mr-2 -mb-1",
+                    ),
+                ],
+                className="flex flex-col gap-2",
+            ),
+            html.Div(
+                [
+                    html.Span("Purchase Type:", className="text-xl text-white"),
+                    dcc.Checklist(
+                        id="entry_types",
+                        options=entry_types,
+                        value=entry_types,
+                        className="flex gap-3 text-white text-xl",
+                        labelClassName="label",
+                        inputClassName="checkbox mr-2 -mb-1",
+                    ),
+                ],
+                className="flex flex-col gap-2",
+            ),
+            html.Div(
+                [
+                    html.Span("Locations:", className="text-xl text-white"),
                     dcc.Dropdown(
                         id="locations",
-                        className="dropdown-content h-8",
+                        className="rounded-lg",
                         options=locations,
                         value=locations,
                         multi=True,
                     ),
                 ],
-                className="flex flex-col gap-2",
-            ),
-            html.Div(
-                [
-                    html.Span("Card Type", className="text-xl font-semibold"),
-                    dcc.Checklist(
-                        id="card_types",
-                        options=card_types,
-                        value=card_types,
-                        className="flex gap-3 font-semibold text-white text-xl",
-                        labelClassName="label",
-                        inputClassName="checkbox mr-2 -mb-1",
-                    ),
-                ],
-                className="flex flex-col gap-2",
-            ),
-            html.Div(
-                [
-                    html.Span("Card Country Type", className="text-xl font-semibold"),
-                    dcc.Checklist(
-                        id="card_country_types",
-                        options=card_country_types,
-                        value=card_country_types,
-                        className="flex gap-3 font-semibold text-white text-xl",
-                        labelClassName="label",
-                        inputClassName="checkbox mr-2 -mb-1",
-                    ),
-                ],
-                className="flex flex-col gap-2",
-            ),
-            html.Div(
-                [
-                    html.Span("Purchase Type", className="text-xl font-semibold"),
-                    dcc.Checklist(
-                        id="entry_types",
-                        options=entry_types,
-                        value=entry_types,
-                        className="flex gap-3 font-semibold text-white text-xl",
-                        labelClassName="label",
-                        inputClassName="checkbox mr-2 -mb-1",
-                    ),
-                ],
-                className="flex flex-col gap-2",
+                className="flex flex-col gap-2 col-span-2",
             ),
         ],
     )
